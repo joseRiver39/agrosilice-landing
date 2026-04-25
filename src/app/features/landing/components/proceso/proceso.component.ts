@@ -143,28 +143,45 @@ interface ProcessStep {
       }
       
       &__timeline-mobile {
-        @apply relative ml-6;
+        @apply relative pl-8 pr-4;
+        
+        &::before {
+          content: '';
+          @apply absolute left-[2.45rem] top-4 bottom-4 w-0.5 bg-gradient-to-b from-primary-400 via-accent-400 to-accent-600;
+        }
       }
       
       &__step-mobile {
-        @apply flex gap-4 mb-8;
+        @apply relative flex gap-6 mb-12 last:mb-0;
       }
       
       &__step-mobile-line {
-        @apply relative flex flex-col items-center;
+        @apply relative flex flex-col items-center flex-shrink-0;
       }
       
       &__step-mobile-dot {
         @apply w-10 h-10 rounded-full bg-primary-500 text-white font-bold flex items-center justify-center;
-        @apply text-xl z-10 relative bg-primary-500 text-white;
+        @apply text-xl z-10 relative shadow-lg shadow-primary-200 border-2 border-white;
       }
       
       &__step-mobile-content {
-        @apply flex-1 bg-gray-50 rounded-xl p-4;
+        @apply flex-1 bg-gray-50 rounded-2xl p-6 border border-gray-100 shadow-sm;
+      }
+
+      &__step-title {
+        @apply text-lg font-bold text-gray-900 mb-2;
+      }
+      
+      &__step-description {
+        @apply text-gray-600 text-sm mb-4 leading-relaxed;
+      }
+      
+      &__step-params {
+        @apply inline-block text-[10px] md:text-sm text-accent-700 font-bold bg-accent-100 px-3 py-1 rounded-md uppercase tracking-wider;
       }
       
       &__cta {
-        @apply text-center mt-12;
+        @apply text-center mt-16;
       }
     }
   `]

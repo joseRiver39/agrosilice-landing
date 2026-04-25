@@ -226,33 +226,33 @@ import { CalculationResult, ResidueType, ProcessMethod } from '../../../../core/
       }
       
       &__content {
-        @apply grid grid-cols-1 lg:grid-cols-2 gap-8;
+        @apply grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12;
       }
       
       &__input-panel {
-        @apply bg-gray-50 rounded-xl p-8;
+        @apply bg-gray-50 rounded-xl p-5 md:p-8;
       }
       
       &__step {
-        @apply mb-8;
+        @apply mb-6 md:mb-8;
       }
       
       &__label {
-        @apply flex items-center gap-2 text-gray-700 font-semibold mb-4;
+        @apply flex items-center gap-2 text-gray-700 font-semibold mb-3 md:mb-4;
       }
       
       &__step-number {
-        @apply w-6 h-6 rounded-full bg-primary-500 text-white text-sm flex items-center justify-center;
+        @apply w-6 h-6 rounded-full bg-primary-500 text-white text-sm flex items-center justify-center flex-shrink-0;
       }
       
       &__options {
-        @apply grid grid-cols-1 sm:grid-cols-3 gap-4;
+        @apply grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4;
       }
       
       &__option {
-        @apply bg-white rounded-lg p-4 text-center border-2 border-transparent cursor-pointer;
-        @apply transition-all duration-300;
-        @apply hover:border-primary-300;
+        @apply bg-white rounded-lg p-3 md:p-4 text-center border-2 border-transparent cursor-pointer;
+        @apply transition-all duration-300 flex sm:flex-col items-center sm:justify-center gap-4 sm:gap-2;
+        @apply hover:border-primary-300 shadow-sm;
         
         &.selected {
           @apply border-primary-500 bg-primary-50;
@@ -260,7 +260,7 @@ import { CalculationResult, ResidueType, ProcessMethod } from '../../../../core/
       }
       
       &__option-icon {
-        @apply w-10 h-10 mx-auto mb-2 rounded-full bg-gray-100 flex items-center justify-center;
+        @apply w-10 h-10 flex-shrink-0 rounded-full bg-gray-100 flex items-center justify-center;
         
         svg {
           @apply w-5 h-5 text-gray-600;
@@ -268,24 +268,24 @@ import { CalculationResult, ResidueType, ProcessMethod } from '../../../../core/
       }
       
       &__option-name {
-        @apply block font-medium text-gray-900 mb-1;
+        @apply block font-medium text-gray-900 text-left sm:text-center;
       }
       
       &__option-info {
-        @apply block text-sm text-gray-500;
+        @apply block text-xs text-gray-500 text-left sm:text-center;
       }
       
       &__input-group {
-        @apply flex gap-2;
+        @apply flex flex-col sm:flex-row gap-2;
       }
       
       &__input {
-        @apply flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200;
+        @apply w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200;
         @apply outline-none transition-all;
       }
       
       &__select {
-        @apply px-4 py-3 rounded-lg border border-gray-300 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200;
+        @apply w-full sm:w-auto px-4 py-3 rounded-lg border border-gray-300 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200;
         @apply outline-none transition-all;
       }
       
@@ -294,11 +294,11 @@ import { CalculationResult, ResidueType, ProcessMethod } from '../../../../core/
       }
       
       &__methods {
-        @apply grid grid-cols-1 gap-4;
+        @apply grid grid-cols-1 gap-3 md:gap-4;
       }
       
       &__method {
-        @apply bg-white rounded-lg p-4 text-left border-2 border-transparent cursor-pointer;
+        @apply bg-white rounded-lg p-3 md:p-4 text-left border-2 border-transparent cursor-pointer shadow-sm;
         @apply transition-all duration-300;
         @apply hover:border-gray-300;
         
@@ -308,51 +308,51 @@ import { CalculationResult, ResidueType, ProcessMethod } from '../../../../core/
       }
       
       &__method-header {
-        @apply flex justify-between items-center mb-2;
+        @apply flex justify-between items-center mb-1 md:mb-2;
       }
       
       &__method-name {
-        @apply font-semibold text-gray-900;
+        @apply font-semibold text-gray-900 text-sm md:text-base;
       }
       
       &__method-yield {
-        @apply bg-primary-100 text-primary-700 text-sm px-2 py-1 rounded;
+        @apply bg-primary-100 text-primary-700 text-[10px] md:text-xs px-2 py-1 rounded font-bold;
       }
       
       &__method-details {
-        @apply text-sm text-gray-600 mb-2;
+        @apply text-xs text-gray-600 mb-1 md:mb-2;
       }
       
       &__method-purity {
-        @apply text-sm text-accent-600 font-medium;
+        @apply text-xs text-accent-600 font-bold;
       }
       
       &__results {
-        @apply bg-gray-900 rounded-xl p-8 text-white;
+        @apply bg-gray-900 rounded-xl p-5 md:p-8 text-white;
       }
       
       &__results-title {
-        @apply text-2xl font-bold mb-6;
+        @apply text-xl md:text-2xl font-bold mb-6;
       }
       
       &__result-cards {
-        @apply grid grid-cols-1 sm:grid-cols-2 gap-4;
+        @apply grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4;
       }
       
       &__result-card {
-        @apply bg-gray-800 rounded-lg p-4;
+        @apply bg-gray-800 rounded-lg p-4 flex flex-col;
         
         &--highlight {
-          @apply bg-gradient-to-br from-primary-600 to-primary-700;
+          @apply bg-gradient-to-br from-primary-600 to-primary-700 border border-primary-400/30;
         }
         
         &--green {
-          @apply bg-gradient-to-br from-accent-600 to-accent-700;
+          @apply bg-gradient-to-br from-accent-600 to-accent-700 border border-accent-400/30;
         }
       }
       
       &__result-icon {
-        @apply w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-2;
+        @apply w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-3;
         
         svg {
           @apply w-5 h-5;
@@ -360,19 +360,19 @@ import { CalculationResult, ResidueType, ProcessMethod } from '../../../../core/
       }
       
       &__result-label {
-        @apply text-sm text-gray-300 mb-1;
+        @apply text-xs text-gray-300 mb-1 uppercase tracking-wider font-medium;
       }
       
       &__result-value {
-        @apply text-2xl font-bold mb-1;
+        @apply text-xl md:text-2xl font-bold mb-1 break-words;
       }
       
       &__result-range {
-        @apply text-sm text-gray-400;
+        @apply text-xs text-gray-400;
       }
       
       &__result-percent {
-        @apply text-sm text-primary-300 mt-2;
+        @apply text-xs text-primary-300 mt-2 font-bold;
       }
       
       &__result-grade {

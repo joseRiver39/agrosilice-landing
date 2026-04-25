@@ -54,11 +54,11 @@ import { CommonModule } from '@angular/common';
       }
 
       &__content {
-        @apply flex flex-row justify-between items-center gap-8 pb-12 border-b border-gray-800;
+        @apply flex flex-col md:flex-row justify-between items-center gap-10 md:gap-8 pb-12 border-b border-gray-800 text-center md:text-left;
       }
 
       &__brand {
-        @apply flex flex-col items-start gap-3 max-w-xs;
+        @apply flex flex-col items-center md:items-start gap-3 max-w-xs;
       }
 
       &__logo {
@@ -78,7 +78,7 @@ import { CommonModule } from '@angular/common';
       }
 
       &__institution {
-        @apply flex flex-col items-center;
+        @apply flex flex-col items-center py-4 md:py-0;
       }
 
       &__unad-logo {
@@ -86,7 +86,7 @@ import { CommonModule } from '@angular/common';
       }
 
       &__author {
-        @apply flex flex-col items-end gap-1;
+        @apply flex flex-col items-center md:items-end gap-1;
       }
 
       &__author-label {

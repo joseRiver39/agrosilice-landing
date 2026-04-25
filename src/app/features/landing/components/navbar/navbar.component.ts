@@ -105,7 +105,7 @@ interface NavLink {
       }
       
       &__cta {
-        @hidden md:flex;
+        @apply hidden md:flex;
         @apply bg-primary-500 text-white font-semibold px-4 py-2 rounded-lg;
         @apply transition-all duration-300 hover:bg-primary-600 hover:shadow-md;
       }

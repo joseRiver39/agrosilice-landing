@@ -28,8 +28,9 @@ La calculadora utiliza un modelo basado en investigaciones de *SciELO Colombia* 
 - **Valorización**: Basada en precios internacionales de sílice industrial ($2-5 USD/kg) y especial ($10-50 USD/kg).
 
 ### 💵 Origen de Datos (TRM)
-Para la conversión a Pesos Colombianos, la app consume en tiempo real la **API de TRM Colombia**, obteniendo el valor oficial certificado por la Superintendencia Financiera.
-- **Fuente**: [trm-colombia.vercel.app](https://trm-colombia.vercel.app/)
+Para la conversión a Pesos Colombianos, la app consume en tiempo real la **API de Datos Abiertos del Gobierno Colombiano**, obteniendo el valor oficial certificado por la Superintendencia Financiera.
+- **Fuente**: [Portal de Datos Abiertos (datos.gov.co)](https://www.datos.gov.co/Econom-a-y-Finanzas/Tasa-Representativa-del-Mercado-TRM/ceyp-9c7c)
+- **Endpoint**: Superintendencia Financiera de Colombia.
 
 ## 📦 Estructura del Proyecto
 

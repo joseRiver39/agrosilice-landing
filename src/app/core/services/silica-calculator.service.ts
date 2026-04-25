@@ -101,20 +101,23 @@ export class SilicaCalculatorService {
   }
 
   /**
-   * Fetch current TRM from a reliable API
+   * Fetch current TRM from the official Colombian Government Open Data API
    */
   private updateTrm(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Using a free API for Colombian TRM
-      this.http.get<any>('https://trm-colombia.vercel.app/api/trm/current').subscribe({
+      // Official TRM endpoint from Superintendencia Financiera de Colombia (datos.gov.co)
+      const apiUrl = 'https://www.datos.gov.co/resource/ceyp-9c7c.json?$order=vigenciadesde DESC&$limit=1';
+      
+      this.http.get<any[]>(apiUrl).subscribe({
         next: (response) => {
-          if (response && response.value) {
-            console.log('TRM Actualizada:', response.value);
-            this.currentTrm.set(response.value);
+          if (response && response.length > 0 && response[0].valor) {
+            const trmValue = parseFloat(response[0].valor);
+            console.log('TRM Oficial Actualizada:', trmValue);
+            this.currentTrm.set(trmValue);
           }
         },
         error: (err) => {
-          console.warn('No se pudo obtener la TRM en tiempo real, usando valor por defecto.', err);
+          console.warn('No se pudo obtener la TRM oficial, usando valor por defecto.', err);
           this.currentTrm.set(this.DEFAULT_USD_TO_COP);
         }
       });

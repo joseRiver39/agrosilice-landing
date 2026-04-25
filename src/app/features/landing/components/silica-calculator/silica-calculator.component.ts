@@ -107,7 +107,13 @@ import { CalculationResult, ResidueType, ProcessMethod } from '../../../../core/
           
           <!-- Results Panel -->
           <div class="calculator__results">
-            <h3 class="calculator__results-title">Resultados</h3>
+            <div class="calculator__results-header-row">
+              <h3 class="calculator__results-title">Resultados</h3>
+              <div class="calculator__trm-badge">
+                <span class="calculator__trm-dot"></span>
+                TRM: {{ formatCOP(getCurrentTrm()) }}
+              </div>
+            </div>
             
             @if (hasValidInput()) {
               <div class="calculator__result-cards">
@@ -331,8 +337,20 @@ import { CalculationResult, ResidueType, ProcessMethod } from '../../../../core/
         @apply bg-gray-900 rounded-xl p-5 md:p-8 text-white;
       }
       
+      &__results-header-row {
+        @apply flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6;
+      }
+      
       &__results-title {
-        @apply text-xl md:text-2xl font-bold mb-6;
+        @apply text-xl md:text-2xl font-bold mb-0;
+      }
+
+      &__trm-badge {
+        @apply flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 text-xs font-bold text-primary-300;
+      }
+
+      &__trm-dot {
+        @apply w-2 h-2 rounded-full bg-green-400 animate-pulse;
       }
       
       &__result-cards {
@@ -468,6 +486,10 @@ export class SilicaCalculatorComponent implements OnInit {
         unit
       )
     );
+  }
+
+  getCurrentTrm(): number {
+    return this.calcService.getCurrentTrm();
   }
   
   formatCOP(value: number): string {

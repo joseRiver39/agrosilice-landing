@@ -1,4 +1,6 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, signal, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { 
   CalculationResult, 
   ProcessInfo, 
@@ -12,8 +14,9 @@ import {
   providedIn: 'root'
 })
 export class SilicaCalculatorService {
-  // Exchange rate: 1 USD = 4,200 COP
-  private readonly USD_TO_COP = 4200;
+  // Fallback exchange rate: 1 USD = 4,200 COP
+  private readonly DEFAULT_USD_TO_COP = 4200;
+  private currentTrm = signal<number>(4200);
   
   // Reference: 3,000 kg tamo per hectare
   private readonly KG_TAMO_PER_HECTARE = 3000;
@@ -90,22 +93,37 @@ export class SilicaCalculatorService {
     }
   ];
 
-  readonly marketValues: MarketValue[] = [
-    {
-      grade: 'Industrial',
-      priceUSDPerKg: 2,
-      priceMinCOP: 8400,
-      priceMaxCOP: 21000,
-      applications: ['Construcción', 'Caucho', 'Catalizadores']
-    },
-    {
-      grade: 'Especial',
-      priceUSDPerKg: 10,
-      priceMinCOP: 42000,
-      priceMaxCOP: 210000,
-      applications: ['Electrónica', 'Cosmética', 'Alta tecnología']
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.updateTrm();
+  }
+
+  /**
+   * Fetch current TRM from a reliable API
+   */
+  private updateTrm(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      // Using a free API for Colombian TRM
+      this.http.get<any>('https://trm-colombia.vercel.app/api/trm/current').subscribe({
+        next: (response) => {
+          if (response && response.value) {
+            console.log('TRM Actualizada:', response.value);
+            this.currentTrm.set(response.value);
+          }
+        },
+        error: (err) => {
+          console.warn('No se pudo obtener la TRM en tiempo real, usando valor por defecto.', err);
+          this.currentTrm.set(this.DEFAULT_USD_TO_COP);
+        }
+      });
     }
-  ];
+  }
+
+  getCurrentTrm(): number {
+    return this.currentTrm();
+  }
 
   calculate(
     residueKg: number,
@@ -113,6 +131,8 @@ export class SilicaCalculatorService {
     processMethod: ProcessMethod,
     unit: 'kg' | 'toneladas' | 'cargas' = 'kg'
   ): CalculationResult {
+    const trm = this.currentTrm();
+    
     // Get unit multiplier (1 carga = 125 kg)
     let unitValue = 1;
     if (unit === 'toneladas') {
@@ -147,11 +167,11 @@ export class SilicaCalculatorService {
     // Estimate surface area (m²/g)
     const surfaceArea = processInfo.purityMedia * 300;
     
-    // Calculate valorization (COP)
-    const industrialMinCOP = silicaKgMin * 2 * this.USD_TO_COP;
-    const industrialMaxCOP = silicaKgMax * 5 * this.USD_TO_COP;
-    const especialMinCOP = silicaKgMin * 10 * this.USD_TO_COP;
-    const especialMaxCOP = silicaKgMax * 50 * this.USD_TO_COP;
+    // Calculate valorization (COP) using current TRM
+    const industrialMinCOP = silicaKgMin * 2 * trm;
+    const industrialMaxCOP = silicaKgMax * 5 * trm;
+    const especialMinCOP = silicaKgMin * 10 * trm;
+    const especialMaxCOP = silicaKgMax * 50 * trm;
     
     // Calculate environmental benefits
     const hectaresEquivalent = residueKgActual / this.KG_TAMO_PER_HECTARE;

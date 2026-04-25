@@ -5,7 +5,7 @@ interface ProblemCard {
   id: number;
   title: string;
   description: string;
-  icon: string;
+  image: string;
   impact: string;
   badge: string;
   badgeVariant: 'danger' | 'warning' | 'info';
@@ -20,10 +20,10 @@ interface ProblemCard {
       <div class="container-section">
         <div class="problema__header">
           <span class="problema__subtitle">El problema</span>
-          <h2 class="problema__title">La quemas, el ambiente la paga</h2>
+          <h2 class="problema__title">La quema, el ambiente la paga</h2>
           <p class="problema__description">
-            Millones de toneladas de tamo de arroz se queman anualmente en Colombia, 
-            generando contaminación, multas y pérdidas económicas.
+            Millones de toneladas de tamo de arroz se gestionan de forma ineficiente, 
+            generando contaminación, multas y graves pérdidas económicas.
           </p>
         </div>
         
@@ -31,15 +31,31 @@ interface ProblemCard {
           @for (card of cards; track card.id; let i = $index) {
             <div class="problema__card" 
                  [class.visible]="isCardVisible(card.id)"
-                 [style.--delay]="i * 100 + 'ms'">
-              <div class="problema__card-icon" [innerHTML]="card.icon"></div>
-              <h3 class="problema__card-title">{{ card.title }}</h3>
-              <p class="problema__card-description">{{ card.description }}</p>
-              <div class="problema__card-impact">
-                <span class="problema__card-badge" [class]="'problema__card-badge--' + card.badgeVariant">
-                  {{ card.badge }}
-                </span>
-                <span class="problema__card-impact-text">{{ card.impact }}</span>
+                 [style.--delay]="i * 150 + 'ms'">
+              
+              <div class="problema__card-image-container">
+                <img [src]="card.image" [alt]="card.title" class="problema__card-image">
+                <div class="problema__card-overlay"></div>
+                <span class="problema__card-number">{{ card.id }}</span>
+              </div>
+
+              <div class="problema__card-content">
+                <h3 class="problema__card-title">{{ card.title }}</h3>
+                <p class="problema__card-description">{{ card.description }}</p>
+                
+                <div class="problema__card-impact">
+                  <div class="problema__card-badge-row">
+                    <span class="problema__card-badge" [class]="'problema__card-badge--' + card.badgeVariant">
+                      {{ card.badge }}
+                    </span>
+                  </div>
+                  <div class="problema__card-impact-box">
+                    <svg class="problema__impact-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    <span class="problema__card-impact-text">{{ card.impact }}</span>
+                  </div>
+                </div>
               </div>
             </div>
           }
@@ -48,12 +64,11 @@ interface ProblemCard {
         <div class="problema__highlight">
           <div class="problema__highlight-icon">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
           <p class="problema__highlight-text">
-            <strong>91%</strong> del tamo de arroz en Colombia se quema a cielo abierto, 
-            contribuyendo al cambio climático y afectando la salud pública.
+            <strong>Dato crítico:</strong> El 91% del tamo en Colombia se quema, desperdiciando un potencial económico inmenso y afectando la salud de las comunidades.
           </p>
         </div>
       </div>
@@ -61,7 +76,7 @@ interface ProblemCard {
   `,
   styles: [`
     .problema {
-      @apply py-20 md:py-28 bg-gray-50;
+      @apply py-20 md:py-28 bg-white;
       
       &__header {
         @apply text-center mb-16;
@@ -80,81 +95,96 @@ interface ProblemCard {
       }
       
       &__grid {
-        @apply grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8;
+        @apply grid grid-cols-1 md:grid-cols-2 gap-8;
       }
       
       &__card {
-        @apply bg-white rounded-xl p-8 shadow-md;
-        @apply transition-all duration-500 opacity-0 translate-y-8;
+        @apply bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100;
+        @apply transition-all duration-700 opacity-0 translate-y-12;
         
         &.visible {
           @apply opacity-100 translate-y-0;
         }
         
         &:hover {
-          @apply shadow-xl transform -translate-y-1;
+          @apply shadow-2xl transform -translate-y-2;
         }
       }
-      
-      &__card-icon {
-        @apply w-14 h-14 rounded-xl bg-red-50 flex items-center justify-center mb-4;
-        
-        :deep(svg) {
-          @apply w-8 h-8 text-red-500;
+
+      &__card-image-container {
+        @apply relative h-48 w-full overflow-hidden;
+      }
+
+      &__card-image {
+        @apply w-full h-full object-cover transition-transform duration-700;
+        .problema__card:hover & {
+          @apply scale-110;
         }
+      }
+
+      &__card-overlay {
+        @apply absolute inset-0 bg-gradient-to-t from-black/60 to-transparent;
+      }
+
+      &__card-number {
+        @apply absolute top-4 left-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md;
+        @apply flex items-center justify-center text-white font-bold border border-white/30;
+      }
+      
+      &__card-content {
+        @apply p-6;
       }
       
       &__card-title {
-        @apply text-xl font-bold text-gray-900 mb-3;
+        @apply text-xl font-bold text-gray-900 mb-2 uppercase tracking-tight;
       }
       
       &__card-description {
-        @apply text-gray-600 mb-4;
+        @apply text-gray-600 text-sm mb-6 leading-relaxed;
       }
       
       &__card-impact {
         @apply pt-4 border-t border-gray-100;
       }
+
+      &__card-badge-row {
+        @apply mb-3;
+      }
       
       &__card-badge {
-        @apply inline-block px-3 py-1 rounded-full text-sm font-medium mb-2;
+        @apply inline-block px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider;
         
-        &--danger {
-          @apply bg-red-100 text-red-700;
-        }
-        
-        &--warning {
-          @apply bg-primary-100 text-primary-700;
-        }
-        
-        &--info {
-          @apply bg-blue-100 text-blue-700;
-        }
+        &--danger { @apply bg-red-100 text-red-700; }
+        &--warning { @apply bg-orange-100 text-orange-700; }
+        &--info { @apply bg-blue-100 text-blue-700; }
+      }
+
+      &__card-impact-box {
+        @apply flex items-center gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100;
+      }
+
+      &__impact-icon {
+        @apply w-5 h-5 text-red-500 flex-shrink-0;
       }
       
       &__card-impact-text {
-        @apply text-gray-700 block text-sm;
+        @apply text-gray-800 font-semibold text-xs md:text-sm;
       }
       
       &__highlight {
-        @apply mt-12 flex items-center justify-center gap-4 p-6 bg-red-50 rounded-xl;
-        @apply max-w-3xl mx-auto;
+        @apply mt-16 flex items-center gap-6 p-8 bg-primary-50 rounded-2xl border-2 border-primary-100;
+        @apply max-w-4xl mx-auto;
       }
       
       &__highlight-icon {
-        @apply w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0;
+        @apply w-14 h-14 rounded-2xl bg-primary-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary-200;
         
-        svg {
-          @apply w-6 h-6 text-red-600;
-        }
+        svg { @apply w-8 h-8 text-white; }
       }
       
       &__highlight-text {
-        @apply text-gray-700 text-center;
-        
-        strong {
-          @apply text-red-600;
-        }
+        @apply text-gray-800 text-lg leading-snug;
+        strong { @apply text-primary-700; }
       }
     }
   `]
@@ -166,37 +196,37 @@ export class ProblemaComponent implements OnInit {
     {
       id: 1,
       title: 'Quema a cielo abierto',
-      description: 'La práctica tradicional de quema genera emisiones de CO₂, material particulado y compuestos orgánicos volátiles.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>`,
-      impact: 'Multas MADS hasta $1.500.000 COP/ha',
-      badge: 'Alto impacto',
+      description: 'Práctica que libera CO₂, material particulado y destruye el potencial económico del residuo afectando la salud pública.',
+      image: 'images/problema/quema.jpg',
+      impact: 'Multas hasta $1.500.000 COP/ha',
+      badge: 'IMPACTO AMBIENTAL CRÍTICO',
       badgeVariant: 'danger'
     },
     {
       id: 2,
       title: 'Disposición en rellenos',
-      description: 'El transporte y disposición legal del residuo representa costos operativos significativos para las arroceras.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>`,
-      impact: '$80.000 - $120.000 COP/tonelada',
-      badge: 'Costo operativo',
+      description: 'Genera altos costos de transporte y ocupa espacio valioso. El tamo no se descompone fácilmente por su alto contenido de sílice.',
+      image: 'images/problema/relleno.jpg',
+      impact: 'Costo $80.000 - $120.000 /ton',
+      badge: 'GASTO OPERATIVO ELEVADO',
       badgeVariant: 'warning'
     },
     {
       id: 3,
       title: 'Abandono en campos',
-      description: 'El tamo abandonado genera breeding grounds para plagas y enfermedades que afectan los cultivos del siguiente ciclo.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
-      impact: 'Pérdida 15-30% siguiente cosecha',
-      badge: 'Riesgo fitosanitario',
+      description: 'Dificulta labores agrícolas, atrae plagas y enfermedades que afectan la productividad del siguiente ciclo de cultivo.',
+      image: 'images/problema/abandono.jpg',
+      impact: 'Riesgo de plagas y enfermedades',
+      badge: 'AMENAZA FITOSANITARIA',
       badgeVariant: 'danger'
     },
     {
       id: 4,
-      title: 'Costos económicos acumulados',
-      description: 'La sumatoria de transporte, mano de obra y potenciales multas representa una carga financiera significativa para los productores.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2c.393 0 .77-.082 1.105-.236M12 20c-1.657 0-3-.895-3-2s1.343-2 3-2c.393 0 .77.082 1.105.236M6 12a6 6 0 1112 0 6 6 0 01-12 0zm0 0v6m6-6h6"/></svg>`,
-      impact: '+$500.000 COP/ha/año',
-      badge: 'Pérdida económica',
+      title: 'Costos económicos',
+      description: 'Gastos acumulados en transporte, mano de obra y multas que reducen drásticamente la rentabilidad del productor arrocero.',
+      image: 'images/problema/costos.jpg',
+      impact: 'Pérdida rentabilidad acumulada',
+      badge: 'CARGA FINANCIERA',
       badgeVariant: 'danger'
     }
   ];
@@ -226,7 +256,7 @@ export class ProblemaComponent implements OnInit {
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
     
     cards.forEach(card => observer.observe(card));

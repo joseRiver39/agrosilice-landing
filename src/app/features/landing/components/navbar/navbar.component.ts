@@ -10,7 +10,7 @@ interface NavLink {
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule],
   template: `
     <nav class="navbar" [class.scrolled]="isScrolled()" [class.menu-open]="menuOpen()">
       <div class="navbar__container">

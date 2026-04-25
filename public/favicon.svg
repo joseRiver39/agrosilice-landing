@@ -1,0 +1,30 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo circular -->
+  <circle cx="32" cy="32" r="32" fill="#1a1a2e"/>
+  
+  <!-- Circulo externo dorado -->
+  <circle cx="32" cy="32" r="28" fill="none" stroke="#F4C430" stroke-width="2"/>
+  
+  <!-- Gota/Moneda estilizada - símbolo de transformación -->
+  <g transform="translate(32, 32)">
+    <!-- Moneda dorada (parte superior) -->
+    <circle cx="0" cy="-8" r="10" fill="#F4C430"/>
+    <circle cx="0" cy="-8" r="8" fill="#FFD700"/>
+    
+    <!-- Símbolo de silicio/transformación (parte inferior) -->
+    <g transform="translate(0, 8)">
+      <!-- Forma de gota/cristal -->
+      <path d="M -6 -4 Q -8 0 -4 6 Q 0 10 0 10 Q 0 10 4 6 Q 8 0 6 -4 Z" fill="#7AC943" stroke="#5a9933" stroke-width="1"/>
+      
+      <!-- Líneas internas representando pureza/transformación -->
+      <line x1="-2" y1="0" x2="2" y2="0" stroke="#fff" stroke-width="1" opacity="0.6"/>
+      <line x1="-3" y1="3" x2="3" y2="3" stroke="#fff" stroke-width="1" opacity="0.4"/>
+    </g>
+  </g>
+  
+  <!-- Pequeños puntos decorativos (como en el diseño principal) -->
+  <circle cx="10" cy="10" r="1.5" fill="#F4C430" opacity="0.6"/>
+  <circle cx="54" cy="12" r="1.5" fill="#F4C430" opacity="0.6"/>
+  <circle cx="52" cy="50" r="1.5" fill="#7AC943" opacity="0.6"/>
+  <circle cx="12" cy="48" r="1.5" fill="#7AC943" opacity="0.6"/>
+</svg>

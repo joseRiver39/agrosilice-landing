@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './features/landing/components/navbar/navbar.component';
 import { HeroComponent } from './features/landing/components/hero/hero.component';
 import { ProblemaComponent } from './features/landing/components/problema/problema.component';
@@ -8,14 +7,12 @@ import { AplicacionesComponent } from './features/landing/components/aplicacione
 import { SilicaCalculatorComponent } from './features/landing/components/silica-calculator/silica-calculator.component';
 import { MercadoComponent } from './features/landing/components/mercado/mercado.component';
 import { BiorrefineriaComponent } from './features/landing/components/biorrefineria/biorrefineria.component';
-import { ContactoComponent } from './features/landing/components/contacto/contacto.component';
 import { FooterComponent } from './features/landing/components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet,
     NavbarComponent,
     HeroComponent,
     ProblemaComponent,
@@ -24,7 +21,6 @@ import { FooterComponent } from './features/landing/components/footer/footer.com
     SilicaCalculatorComponent,
     MercadoComponent,
     BiorrefineriaComponent,
-    ContactoComponent,
     FooterComponent
   ],
   template: `

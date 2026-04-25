@@ -6,7 +6,6 @@ import { AplicacionesComponent } from './components/aplicaciones/aplicaciones.co
 import { SilicaCalculatorComponent } from './components/silica-calculator/silica-calculator.component';
 import { MercadoComponent } from './components/mercado/mercado.component';
 import { BiorrefineriaComponent } from './components/biorrefineria/biorrefineria.component';
-import { ContactoComponent } from './components/contacto/contacto.component';
 
 @Component({
   selector: 'app-landing',
@@ -18,8 +17,7 @@ import { ContactoComponent } from './components/contacto/contacto.component';
     AplicacionesComponent,
     SilicaCalculatorComponent,
     MercadoComponent,
-    BiorrefineriaComponent,
-    ContactoComponent
+    BiorrefineriaComponent
   ],
   template: `
     <app-hero />
@@ -37,4 +35,4 @@ import { ContactoComponent } from './components/contacto/contacto.component';
     }
   `]
 })
-export class LandingComponent { }
+export class LandingComponent {}

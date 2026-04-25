@@ -37,7 +37,7 @@ import { FooterComponent } from './features/landing/components/footer/footer.com
       <app-silica-calculator />
       <app-mercado />
       <app-biorrefineria />
-      <app-contacto />
+        <!-- <app-contacto /> -->
     </main>
     <app-footer />
   `,

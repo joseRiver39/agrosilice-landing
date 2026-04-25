@@ -29,7 +29,7 @@ import { ContactoComponent } from './components/contacto/contacto.component';
     <app-silica-calculator />
     <app-mercado />
     <app-biorrefineria />
-    <app-contacto />
+    <!-- <app-contacto /> -->
   `,
   styles: [`
     :host {
@@ -37,4 +37,4 @@ import { ContactoComponent } from './components/contacto/contacto.component';
     }
   `]
 })
-export class LandingComponent {}
+export class LandingComponent { }

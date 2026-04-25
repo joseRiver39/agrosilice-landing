@@ -1,57 +1,87 @@
 import { Component, signal, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 
 interface Application {
   id: number;
   title: string;
   description: string;
-  icon: string;
+  bullets: string[];
+  image: string | null;
+  emoji: string;
   color: string;
-  bgColor: string;
+  borderColor: string;
+  badgeColor: string;
 }
 
 @Component({
   selector: 'app-aplicaciones',
   standalone: true,
   imports: [CommonModule],
-  animations: [
-    trigger('expandCollapse', [
-      state('collapsed', style({ height: '0', opacity: 0, overflow: 'hidden' })),
-      state('expanded', style({ height: '*', opacity: 1 })),
-      transition('collapsed <=> expanded', animate('300ms ease-in-out'))
-    ])
-  ],
   template: `
     <section class="aplicaciones" id="aplicaciones">
       <div class="container-section">
         <div class="aplicaciones__header">
           <span class="aplicaciones__subtitle">Aplicaciones</span>
-          <h2 class="aplicaciones__title">Industrias que se benef dúvosea de la sílice</h2>
+          <h2 class="aplicaciones__title">Industrias que se benefician de la sílice</h2>
           <p class="aplicaciones__description">
-            La sílice amorfa de alta pureza tiene múltiples aplicaciones industriales 
-            que varían según el grado de pureza alcanzado.
+            La sílice amorfa de alta pureza extraída del tamo de arroz tiene un amplio espectro
+            de aplicaciones industriales según el grado de pureza alcanzado.
           </p>
         </div>
-        
+
         <div class="aplicaciones__grid">
           @for (app of applications; track app.id) {
-            <button 
+            <div
               class="aplicaciones__card"
-              [class]="app.bgColor"
-              (click)="toggleexpand(app.id)"
-              [disabled]="expandedCard() !== null && expandedCard() !== app.id">
-              <div class="aplicaciones__card-icon" [innerHTML]="app.icon"></div>
-              <h3 class="aplicaciones__card-title">{{ app.title }}</h3>
-              <p class="aplicaciones__card-description" [class.expanded]="expandedCard() === app.id">
-                {{ app.description }}
-              </p>
-              <div class="aplicaciones__card-toggle" [class.rotated]="expandedCard() === app.id">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
+              [class.aplicaciones__card--expanded]="expandedCard() === app.id"
+              [style.border-color]="expandedCard() === app.id ? app.borderColor : 'transparent'">
+
+              <!-- Image area -->
+              <div class="aplicaciones__card-image">
+                @if (app.image) {
+                  <img [src]="app.image" [alt]="app.title" class="aplicaciones__card-img" />
+                } @else {
+                  <div class="aplicaciones__card-emoji" [style.background]="app.color + '22'">
+                    <span>{{ app.emoji }}</span>
+                  </div>
+                }
+                <div class="aplicaciones__card-badge" [style.background]="app.badgeColor">
+                  <span class="aplicaciones__card-number">{{ app.id }}</span>
+                </div>
               </div>
-            </button>
+
+              <!-- Content area -->
+              <div class="aplicaciones__card-body">
+                <h3 class="aplicaciones__card-title" [style.color]="app.color">
+                  {{ app.title }}
+                </h3>
+
+                <button
+                  class="aplicaciones__card-toggle-btn"
+                  (click)="toggleExpand(app.id)"
+                  [attr.aria-expanded]="expandedCard() === app.id">
+                  <span class="aplicaciones__card-preview">{{ app.description }}</span>
+                  <svg
+                    class="aplicaciones__card-chevron"
+                    [class.aplicaciones__card-chevron--open]="expandedCard() === app.id"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </button>
+
+                @if (expandedCard() === app.id) {
+                  <ul class="aplicaciones__card-bullets">
+                    @for (bullet of app.bullets; track bullet) {
+                      <li class="aplicaciones__card-bullet">
+                        <span class="aplicaciones__bullet-dot" [style.background]="app.badgeColor"></span>
+                        {{ bullet }}
+                      </li>
+                    }
+                  </ul>
+                }
+              </div>
+
+            </div>
           }
         </div>
       </div>
@@ -60,127 +90,218 @@ interface Application {
   styles: [`
     .aplicaciones {
       @apply py-20 md:py-28 bg-gray-50;
-      
+
       &__header {
         @apply text-center mb-16;
       }
-      
+
       &__subtitle {
         @apply text-accent-600 font-medium tracking-wide uppercase text-sm mb-2 block;
       }
-      
+
       &__title {
         @apply text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4;
       }
-      
+
       &__description {
         @apply text-lg text-gray-600 max-w-3xl mx-auto;
       }
-      
+
       &__grid {
         @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
       }
-      
+
       &__card {
-        @apply relative bg-white rounded-xl p-6 text-left shadow-md cursor-pointer;
-        @apply transition-all duration-300;
-        @apply hover:shadow-xl;
-        
-        &:disabled {
-          @apply opacity-50 pointer-events-none;
+        @apply bg-white rounded-2xl shadow-md overflow-hidden border-2 border-transparent;
+        @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+
+        &--expanded {
+          @apply shadow-xl -translate-y-1;
         }
       }
-      
-      &__card-icon {
-        @apply w-12 h-12 rounded-lg flex items-center justify-center mb-4;
-        
-        :deep(svg) {
-          @apply w-8 h-8;
+
+      &__card-image {
+        @apply relative h-44 overflow-hidden bg-gray-100;
+      }
+
+      &__card-img {
+        @apply w-full h-full object-cover transition-transform duration-500;
+
+        .aplicaciones__card:hover & {
+          @apply scale-105;
         }
       }
-      
+
+      &__card-emoji {
+        @apply w-full h-full flex items-center justify-center;
+
+        span {
+          @apply text-7xl;
+        }
+      }
+
+      &__card-badge {
+        @apply absolute top-3 left-3 w-9 h-9 rounded-full flex items-center justify-center shadow-md;
+      }
+
+      &__card-number {
+        @apply text-white font-bold text-base;
+      }
+
+      &__card-body {
+        @apply p-5;
+      }
+
       &__card-title {
-        @apply text-lg font-bold text-gray-900 mb-2;
+        @apply text-lg font-bold mb-3;
       }
-      
-      &__card-description {
-        @apply text-gray-600 text-sm overflow-hidden max-h-0 opacity-0 transition-all duration-300;
-        
-        &.expanded {
-          @apply max-h-40 opacity-100 mt-2;
-        }
+
+      &__card-toggle-btn {
+        @apply w-full text-left flex items-start justify-between gap-2 cursor-pointer;
+        @apply bg-transparent border-none p-0;
       }
-      
-      &__card-toggle {
-        @apply absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center;
-        @apply text-gray-400 transition-transform duration-300;
-        
-        &.rotated {
+
+      &__card-preview {
+        @apply text-gray-600 text-sm leading-relaxed flex-1;
+      }
+
+      &__card-chevron {
+        @apply w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5 transition-transform duration-300;
+
+        &--open {
           @apply rotate-180;
         }
+      }
+
+      &__card-bullets {
+        @apply mt-4 space-y-2 list-none p-0;
+      }
+
+      &__card-bullet {
+        @apply flex items-start gap-2 text-sm text-gray-600;
+      }
+
+      &__bullet-dot {
+        @apply w-2 h-2 rounded-full flex-shrink-0 mt-1.5;
       }
     }
   `]
 })
 export class AplicacionesComponent implements OnInit {
   expandedCard = signal<number | null>(null);
-  
+
   applications: Application[] = [
     {
       id: 1,
-      title: 'Construcción',
-      description: 'Hormigones de alto rendimiento, morteros, ladrillos refractarios y materiales compuestos. Reduce costos hasta 30% vs sílice convencional.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-1 4h1m2-6h3m-3 4h3m-6 4h.01M9 21h6m-6-4h.01M9 21v-4"/></svg>`,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50'
+      title: 'Industria de la Construcción',
+      description: 'Aditivo para concretos de alto rendimiento, morteros y ladrillos refractarios.',
+      bullets: [
+        'Aditivo para concreto: Mejora durabilidad y trabajabilidad',
+        'Morteros y revoques: Aumenta adherencia, reduce permeabilidad',
+        'Ladrillos y cerámicos: Mejora propiedades mecánicas y térmicas',
+        'Reduce costos hasta 30% vs sílice convencional'
+      ],
+      image: 'images/aplicaciones/construccion.png',
+      emoji: '🏗️',
+      color: '#1d4ed8',
+      borderColor: '#3b82f6',
+      badgeColor: '#1d4ed8'
     },
     {
       id: 2,
       title: 'Caucho y Neumáticos',
-      description: 'Agente de refuerzo de alta dispersión para neumáticos verdes. Mejora resistencia al desgaste y eficiencia energética.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.195-1.264.762-2.425 1.622-3.293A7.962 7.962 0 0112 4c1.657 0 3.219.456 4.542 1.237.86.868 1.427 2.03 1.622 3.294M10.325 4.317c.195 1.264.762 2.425 1.622 3.293A7.962 7.962 0 0112 4c-1.657 0-3.219.456-4.542 1.237-.86.868-1.427 2.03-1.622 3.294m0 0l.352 3.624a2 2 0 001.943 1.592h3.998a2 2 0 001.943-1.592l.352-3.624m-6.25 6.25h6.5a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-6.5a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5z"/></svg>`,
-      color: 'text-gray-600',
-      bgColor: 'bg-gray-50'
+      description: 'Agente de refuerzo alternativo al negro de humo para neumáticos verdes.',
+      bullets: [
+        'Agente de refuerzo: Alternativa ecológica al negro de humo',
+        'Neumáticos "verdes": Mayor resistencia a la rodadura',
+        'Mejora tracción, resistencia al desgaste y durabilidad',
+        'Reduce consumo de combustible hasta 20%'
+      ],
+      image: 'images/aplicaciones/caucho.png',
+      emoji: '🔵',
+      color: '#374151',
+      borderColor: '#6b7280',
+      badgeColor: '#374151'
     },
     {
       id: 3,
       title: 'Química y Catalizadores',
-      description: 'Soporte de catalizadores, adsorbentes y columnas de cromatografía. Área superficial hasta 300 m²/g.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10V5L8 4z"/></svg>`,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50'
+      description: 'Soporte de catalizadores y adsorbentes con área superficial de hasta 300 m²/g.',
+      bullets: [
+        'Soporte de catalizadores para procesos catalíticos',
+        'Adsorbentes: Purificación de gases y líquidos',
+        'Columnas de cromatografía de alta resolución',
+        'Área superficial hasta 300 m²/g'
+      ],
+      image: 'images/aplicaciones/quimica.png',
+      emoji: '🧪',
+      color: '#15803d',
+      borderColor: '#22c55e',
+      badgeColor: '#15803d'
     },
     {
       id: 4,
-      title: 'Cosmética',
-      description: 'Abrasivo suave, espesante y absorbente en cremas, pastas dentales y productos de cuidado personal.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>`,
-      color: 'text-pink-600',
-      bgColor: 'bg-pink-50'
+      title: 'Cosmética y Cuidado Personal',
+      description: 'Abrasivo suave, espesante y absorbente en cremas, pastas dentales y maquillaje.',
+      bullets: [
+        'Abrasivo suave en pastas dentales y exfoliantes',
+        'Agente espesante en cremas, lociones y maquillaje',
+        'Absorbente en polvos faciales y desodorantes',
+        'Aprobado para uso cosmético por autoridades sanitarias'
+      ],
+      image: 'images/aplicaciones/cosmetica.png',
+      emoji: '💄',
+      color: '#be185d',
+      borderColor: '#ec4899',
+      badgeColor: '#be185d'
     },
     {
       id: 5,
-      title: 'Alimentaria',
-      description: 'Antiaglomerante (E-551), clarificante de bebidas y portador de aditivos. Aprobado FDA para consumo humano.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M9 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0"/></svg>`,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-50'
+      title: 'Industria Alimentaria',
+      description: 'Antiaglomerante E-551, clarificante de bebidas y portador de aditivos.',
+      bullets: [
+        'Antiaglomerante (E-551): Sal, especias, leche en polvo',
+        'Clarificante en producción de cervezas y jugos',
+        'Portador de aromas y aditivos alimentarios',
+        'Aprobado FDA para consumo humano'
+      ],
+      image: 'images/aplicaciones/alimentaria.png',
+      emoji: '🌾',
+      color: '#c2410c',
+      borderColor: '#f97316',
+      badgeColor: '#c2410c'
     },
     {
       id: 6,
-      title: 'Agricultura',
-      description: 'Mejorador de suelos, portador controlado de agroquímicos y fertilizante de liberación lenta. Aumenta eficiencia hasta 40%.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`,
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-50'
+      title: 'Aplicaciones Agrícolas',
+      description: 'Mejorador de suelos y portador de agroquímicos con liberación controlada.',
+      bullets: [
+        'Mejorador de suelos: Aporta sílice disponible para plantas',
+        'Portador de agroquímicos de liberación controlada',
+        'Fertilizante de liberación lenta de alta eficiencia',
+        'Aumenta eficiencia de fertilizantes hasta 40%'
+      ],
+      image: null,
+      emoji: '🌱',
+      color: '#065f46',
+      borderColor: '#10b981',
+      badgeColor: '#065f46'
     },
     {
       id: 7,
       title: 'Alta Tecnología',
-      description: 'Electróníónica, baterías de litio, celdas de combustible y materiales semiconductores. Pureza >99% requerida.',
-      icon: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>`,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50'
+      description: 'Electrónica, baterías de litio, celdas de combustible y semiconductores.',
+      bullets: [
+        'Nanomateriales para electrónica y sensores',
+        'Ánodo en baterías de litio de próxima generación',
+        'Materiales semiconductores y fotovoltaicos',
+        'Requiere pureza >99% de SiO₂'
+      ],
+      image: null,
+      emoji: '⚡',
+      color: '#6d28d9',
+      borderColor: '#8b5cf6',
+      badgeColor: '#6d28d9'
     }
   ];
 
@@ -188,11 +309,7 @@ export class AplicacionesComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  toggleexpand(id: number): void {
-    if (this.expandedCard() === id) {
-      this.expandedCard.set(null);
-    } else {
-      this.expandedCard.set(id);
-    }
+  toggleExpand(id: number): void {
+    this.expandedCard.set(this.expandedCard() === id ? null : id);
   }
 }

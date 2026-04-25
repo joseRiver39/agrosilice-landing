@@ -161,8 +161,7 @@ export class NavbarComponent implements OnInit {
     { label: 'Proceso', href: '#proceso' },
     { label: 'Aplicaciones', href: '#aplicaciones' },
     { label: 'Calculadora', href: '#calculator' },
-    { label: 'Mercado', href: '#mercado' },
-    { label: 'Contacto', href: '#contacto' }
+    { label: 'Mercado', href: '#mercado' }
   ];
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}

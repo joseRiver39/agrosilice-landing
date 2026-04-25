@@ -36,7 +36,7 @@ interface ProcessStep {
                 <p class="proceso__step-description">{{ step.description }}</p>
                 <div class="proceso__step-params">{{ step.parameters }}</div>
               </div>
-              <div class="proceso__step-icon" [innerHTML]="step.icon"></div>
+              <div class="proceso__step-dot"></div>
             </div>
           }
         </div>
@@ -137,21 +137,9 @@ interface ProcessStep {
         @apply text-sm text-accent-600 font-medium bg-accent-50 px-3 py-1 rounded;
       }
       
-      &__step-icon {
-        @apply absolute w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center;
-        @apply text-primary-600;
-        
-        :deep(svg) {
-          @apply w-8 h-8;
-        }
-      }
-      
-      &--left &__step-icon {
-        @apply left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2;
-      }
-      
-      &--right &__step-icon {
-        @apply left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2;
+      &__step-dot {
+        @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+        @apply w-4 h-4 rounded-full bg-primary-500 border-4 border-white shadow-md z-10;
       }
       
       &__timeline-mobile {

@@ -8,7 +8,9 @@ import { CommonModule } from '@angular/common';
   template: `
     <footer class="footer">
       <div class="footer__container">
-        <div class="footer__top">
+        <div class="footer__content">
+
+          <!-- 1. RiSil -->
           <div class="footer__brand">
             <div class="footer__logo">
               <svg class="footer__logo-icon" viewBox="0 0 40 40" fill="none">
@@ -22,35 +24,23 @@ import { CommonModule } from '@angular/common';
               Transformando residuos agrícolas en oportunidades económicas y ambientales.
             </p>
           </div>
-          
-          <div class="footer__links">
-            <div class="footer__column">
-              <h4 class="footer__column-title">Navegación</h4>
-              <ul class="footer__list">
-                <li><a href="#problema">El Problema</a></li>
-                <li><a href="#proceso">El Proceso</a></li>
-                <li><a href="#aplicaciones">Aplicaciones</a></li>
-                <li><a href="#calculator">Calculadora</a></li>
-              </ul>
-            </div>
-            
-            <div class="footer__column">
-              <h4 class="footer__column-title">Contacto</h4>
-              <ul class="footer__list">
-                <li>contacto at risil.co</li>
-                <li>+57 (1) 234 5678</li>
-                <li>Bogotá, Colombia</li>
-              </ul>
-            </div>
+
+          <!-- 2. UNAD -->
+          <div class="footer__institution">
+            <img src="images/unad_logo.png" alt="Logo UNAD" class="footer__unad-logo"
+                 onerror="this.style.display='none'">
           </div>
+
+          <!-- 3. Autor -->
+          <div class="footer__author">
+            <span class="footer__author-label">Desarrollado por:</span>
+            <span class="footer__author-name">Jose Rivera</span>
+          </div>
+
         </div>
-        
+
         <div class="footer__bottom">
-          <p class="footer__copyright">
-            © 2024 RiSil. Todos los derechos reservados. | 
-            <a href="#">Política de privacidad</a> | 
-            <a href="#">Términos de uso</a>
-          </p>
+          <p class="footer__copyright">© 2026 RiSil. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>
@@ -58,59 +48,57 @@ import { CommonModule } from '@angular/common';
   styles: [`
     .footer {
       @apply bg-gray-900 text-white py-12;
-      
+
       &__container {
         @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
       }
-      
-      &__top {
-        @apply grid grid-cols-1 md:grid-cols-2 gap-12 pb-12 border-b border-gray-800;
+
+      &__content {
+        @apply flex flex-row justify-between items-center gap-8 pb-12 border-b border-gray-800;
       }
-      
+
       &__brand {
-        @apply max-w-sm;
+        @apply flex flex-col items-start gap-3 max-w-xs;
       }
-      
+
       &__logo {
-        @apply flex items-center gap-2 text-primary-500 mb-4;
+        @apply flex items-center gap-2 text-primary-500;
       }
-      
+
       &__logo-icon {
         @apply w-8 h-8;
       }
-      
+
       &__logo-text {
         @apply text-2xl font-bold;
       }
-      
+
       &__tagline {
-        @apply text-gray-400;
+        @apply text-gray-400 text-sm leading-relaxed;
       }
-      
-      &__links {
-        @apply grid grid-cols-2 gap-8;
+
+      &__institution {
+        @apply flex flex-col items-center;
       }
-      
-      &__column-title {
-        @apply font-semibold mb-4;
+
+      &__unad-logo {
+        @apply h-16 w-auto brightness-0 invert opacity-80 hover:opacity-100 transition-opacity;
       }
-      
-      &__list {
-        @apply space-y-2 text-gray-400;
-        
-        a {
-          @apply hover:text-primary-500 transition-colors;
-        }
+
+      &__author {
+        @apply flex flex-col items-end gap-1;
       }
-      
+
+      &__author-label {
+        @apply text-xs text-gray-500 uppercase tracking-widest;
+      }
+
+      &__author-name {
+        @apply text-primary-400 font-semibold text-base;
+      }
+
       &__bottom {
         @apply pt-8 text-center text-gray-500 text-sm;
-      }
-      
-      &__copyright {
-        a {
-          @apply hover:text-primary-500 transition-colors;
-        }
       }
     }
   `]
